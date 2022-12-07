@@ -15,7 +15,7 @@ const CONTACT_MESSAGE_FIELDS = {
 const generateEmailContent = (data, id, code) => {
   console.log("-----------------------------------------");
   console.log(data)
-  
+
   let arraywas = false;
 
   let endOfHTML = "";
@@ -28,7 +28,7 @@ const generateEmailContent = (data, id, code) => {
   let messageForCustomer = "";
 
   if (!data.isConfirmed) {
-    messageForCustomer = `<p>Kliknutim na odkaz potvrdíte objednavku pokodu nepotvrdíte do 24 hodiny objednavka bude automaticky zrušena: <a href="http://localhost:3000/confirm/${linkOnOrder}">Potvrdit objednávku ${id}</a></p>`
+    messageForCustomer = `<p>Kliknutim na odkaz potvrdíte objednavku pokodu nepotvrdíte do 24 hodiny objednavka bude automaticky zrušena: <a href="${process.env.DOMAIN}/confirm/${linkOnOrder}">Potvrdit objednávku ${id}</a></p>`
   }
   else {
     messageForCustomer = `<p>Vaše objednávka byla potvrzena můžete si ji vyzvednout u nás na prodejně </p>`
@@ -60,15 +60,15 @@ const generateEmailContent = (data, id, code) => {
   let prodStr = "";
   Object.entries(data)[3].forEach(element => {
     if (typeof (element) === "object") {
-      
+
 
       for (let index = 0; index < element.length; index++) {
         const curentObj = element[index];
-         console.log("******************************")
+        console.log("******************************")
         console.log(curentObj)
         console.log(curentObj.image)
-       
-        const linkOnProduct = "http://localhost:3000/product/" + curentObj.slug?.current;
+
+        const linkOnProduct = `${process.env.DOMAIN}/product/` + curentObj.slug?.current;
         const imageOfProduct = urlFor(curentObj.image[0]);
         const nameOfProduct = curentObj.name;
         const detailsOfProduct = curentObj.details;
@@ -219,7 +219,7 @@ const generateEmailContent = (data, id, code) => {
                                     class="padding message-content"
                                   >
                                     ${messageForCustomer}
-                                    <h2>Vaše objednávka: <a href="http://localhost:3000/confirm/${linkOnOrder}">${id}</a></h2>
+                                    <h2>Vaše objednávka: <a href="${process.env.DOMAIN}/confirm/${linkOnOrder}">${id}</a></h2>
                                     <div class="form-container">${htmlData}</div>
 
                                     <div class="form-container" >
