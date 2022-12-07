@@ -275,7 +275,7 @@ const Handler = async (req, res) => {
         subject: "Objedávka z obchodu - Sam",
       });
 
-
+      console.log(data.isConfirmed)
       if (!data.isConfirmed) {
         let productInOrder = [];
         Object.entries(data)[3].forEach(element => {
