@@ -300,21 +300,26 @@ const Handler = async (req, res) => {
         console.log(productInOrder)
         var myDate = new Date("2 dec 2012 3:30:00");
         myDate.setHours(myDate.getHours() + 24);
-        client.config({
-          token: process.env.NEXT_PUBLIC_SANITY_TOKEN
-        }).create({
-          _type: 'order',
-          name: data.name,
-          email: data.email,
-          message: data.message,
-          slug: unneID,
-          products: productInOrder,
-          totalPrice: data.totalPrice,
-          totalQuantity: data.totalQuantities,
-          date: moment().format('YYYY-MM-DD HH:mm'),
-          isConfirmed: false,
-          code: unneCode
-        })
+        try {
+          client.config({
+            token: process.env.NEXT_PUBLIC_SANITY_TOKEN
+          }).create({
+            _type: 'order',
+            name: data.name,
+            email: data.email,
+            message: data.message,
+            slug: unneID,
+            products: productInOrder,
+            totalPrice: data.totalPrice,
+            totalQuantity: data.totalQuantities,
+            date: moment().format('YYYY-MM-DD HH:mm'),
+            isConfirmed: false,
+            code: unneCode
+          })
+        } catch (error) {
+          console.log("not created " + error)
+        }
+        
       }
 
       return res.status(200).json({ succes: true });
