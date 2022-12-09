@@ -7,7 +7,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 
 import { useStateContext } from '../../context/StateContext';
 
-import { Filter, Product } from '../../components';
+import { Filter, GridOfProducts, Product } from '../../components';
 
 import Slider from '@mui/material/Slider';
 
@@ -17,34 +17,28 @@ function valuetext(value) {
 const minDistance = 10;
 
 const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
-    const [allSearchedProducts, setAllSearchedProducts] = useState([]);
-    const { setProducts, setKeys, setSections, setSubsections } = useStateContext();
+
+    const { setProducts, setKeys, setSections, setSubsections, isLoading, setLoading, setAllSearchedProducts, allSearchedProducts } = useStateContext();
     const [value1, setValue1] = useState([0, 10]);
     const [priceMax, setPriceMax] = useState(0);
     const [priceMin, setPriceMin] = useState(0);
-    const [isLoading, setLoading] = useState(false);
+
     useEffect(() => {
         setProducts(products);
         setKeys(keys);
         setSections(sections);
         setSubsections(subsections);
-        setAllSearchedProducts(getAllSearchedProducts);
-    }, [])
 
 
-    const override = {
+        let prs = getAllSearchedProducts();
+        setAllSearchedProducts(prs);
+        setFliters(prs)
+    }, [slug.slug.current])
 
-        display: "block",
-        margin: "0 auto",
-        borderColor: "red",
-    };
 
-    const overrideNotDisplay = {
 
-        display: "none",
-        margin: "0 auto",
-        borderColor: "red",
-    };
+
+
     const handleChange1 = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
             return;
@@ -62,17 +56,30 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
         console.log("here")
         console.log(slug.slug.current.toLowerCase())
         let newArray = [];
-        let pr1 = products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
+
+        products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
 
             keys.forEach(key => {
-                console.log(element._ref == key._id)
-                if (element._ref == key._id) {
+                console.log(slug.slug.current + " x " + key.name)
+                if (element._ref === key._id && slug.slug.current.toLowerCase().includes(key.name.toLowerCase())) {
                     newArray.push(searchingProduct)
                 }
             });
 
         }))
-        setFliters(newArray)
+
+        products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
+
+            subsections.forEach(key => {
+                console.log(key)
+                if (element._ref === key._id && slug.slug.current.toLowerCase().includes(key.name.toLowerCase())) {
+                    newArray.push(searchingProduct)
+                }
+            });
+
+        }))
+        console.log("-*-*-*-*-*-*-*-*")
+        console.log(newArray)
         setLoading(false)
         return newArray;
     }
@@ -85,15 +92,14 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
             }
         });
 
-        let min = 99999999999999999999999;
+        let min = 99999999;
         array.forEach(element => {
             if (element.price < min) {
                 min = element.price;
             }
         });
 
-        console.log(max)
-        console.log(min)
+
         setPriceMin(min);
         setPriceMax(max);
         setValue1([min, max])
@@ -102,31 +108,43 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
     const submitFiltres = () => {
         setLoading(true)
         let newArray = [];
-        setAllSearchedProducts(newArray)
+        setAllSearchedProducts([])
         setTimeout(() => {
-            
-        products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
 
-            keys.forEach(key => {
+            products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
 
-                if (element._ref == key._id) {
-                    newArray.push(searchingProduct)
+                keys.forEach(key => {
+                    console.log(slug.slug.current + " x " + key.name)
+                    if (element._ref === key._id && slug.slug.current.toLowerCase().includes(key.name.toLowerCase())) {
+                        newArray.push(searchingProduct)
+                    }
+                });
+    
+            }))
+    
+            products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
+    
+                subsections.forEach(key => {
+                    console.log(key)
+                    if (element._ref === key._id && slug.slug.current.toLowerCase().includes(key.name.toLowerCase())) {
+                        newArray.push(searchingProduct)
+                    }
+                });
+    
+            }))
+
+            let newFiltredArray = [];
+            newArray.forEach(element => {
+
+                if ((element.price >= value1[0] && element.price <= value1[1])) {
+                    newFiltredArray.push(element)
                 }
             });
-
-        }))
-
-        let newFiltredArray = [];
-        newArray.forEach(element => {
-
-            if ((element.price >= value1[0] && element.price <= value1[1])) {
-                newFiltredArray.push(element)
-            }
-        });
-        setAllSearchedProducts(newFiltredArray)
-        setLoading(false)
+            setAllSearchedProducts(newFiltredArray)
+            setLoading(false)
         }, 1000);
-        
+
+
     }
 
     return (
@@ -144,13 +162,13 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
                                 <AiOutlineArrowDown />
                             </button>
                         </div>
-
                         <ul className="sidebar-menu-category-list">
+                            {allSearchedProducts.length > 1 &&  <div>
                             <div className='slider-texts'>
                                 <span>{value1[0]}</span>
                                 <span>{value1[1]}</span>
                             </div>
-
+                        
                             <Slider
                                 getAriaLabel={() => 'Minimum distance'}
                                 value={value1}
@@ -162,6 +180,7 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
                                 min={priceMin}
                                 max={priceMax}
                             />
+                            </div>}
                             <Filter />
 
                             <button className='btn' onClick={submitFiltres}>Ulož filtry</button>
@@ -174,26 +193,8 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
 
                 </div>
 
-                <div className="product-main">
+                <GridOfProducts products={allSearchedProducts} slug={slug} />
 
-                    <h2 className="title">{slug?.name}</h2>
-                    {isLoading && <div className='none'><PulseLoader
-                        color={"#880808"}
-                        loading={isLoading}
-                        cssOverride={override}
-                        size={15}
-                        aria-label="Loading Spinner"
-                        data-testid="loader"
-                    /></div>}
-                    {!isLoading && allSearchedProducts.length < 1 && <div className='none'><span >Zdá se že nic vyhledávano nenabízíme</span></div>}
-                    <div className="product-grid">
-
-                        {allSearchedProducts.length > 0 && allSearchedProducts?.map((product) => <Product product={product} />)}
-
-
-                    </div>
-
-                </div>
 
 
             </div >
@@ -248,4 +249,4 @@ export const getStaticProps = async ({ params: { search } }) => {
     }
 }
 
-export default SearchedProducts
+export default SearchedProducts;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AiOutlineShopping, AiOutlineSearch } from 'react-icons/ai';
 
@@ -20,12 +20,14 @@ const initValues = {
 const initState = { values: initValues };
 
 const Navbar = () => {
- 
+
   const { showCart, products, keys, setShowCart, totalQuantities, sections, subsections } = useStateContext();
   const [state, setState] = useState(initState);
   const [searching, setSearching] = useState(false);
   const [searchedProductsState, setSearchedProducts] = useState([]);
   const [searchedCategoriesState, setSearchedCategories] = useState([]);
+
+ 
 
   let searchedProducts = [];
   const searchProduct = ({ target }) => {
@@ -119,7 +121,7 @@ const Navbar = () => {
           });
 
         });
-        newSections.push({ name: sec.name, slug: sec.slug, subsections: subs, _id:uuidv4() })
+        newSections.push({ name: sec.name, slug: sec.slug, subsections: subs, _id: uuidv4() })
       })}
 
 
@@ -129,20 +131,21 @@ const Navbar = () => {
         <div className="container">
 
 
-          <Link href='/' className="header-logo">E-shop</Link>
+          <Link href='/' className="header-logo" onClick={() => setSearching(false)}>E-shop</Link>
 
 
           <div className="header-search-container">
             <Input type="search" name='search' className="search-field" onChange={searchProduct}
-            />
+              onClick={searchProduct} />
+            {searching && <div className='behindSearch' onClick={() => setSearching(false)}></div>}
             {console.log(searchedProductsState)}
-            <ul className="dropdown-list active" >
+            <ul className={searching ? "dropdown-list active" : "dropdown-list"} >
               {searching && searchedProductsState.length > 0 && <div>
                 <span className="menu-title search-box">Produkty</span>
                 {searchedProductsState?.map((searchedProduct) =>
-                  <Link href={`/product/${searchedProduct.slug.current}`}>
+                  <Link onClick={() => setSearching(false)} href={`/product/${searchedProduct.slug.current}`}>
                     <li className="dropdown-item search-box">
-                      <a href="#">{searchedProduct.name}</a>
+                      <div>{searchedProduct.name}</div>
                     </li>
                   </Link>
                 )}
@@ -157,9 +160,9 @@ const Navbar = () => {
 
                 <span className="menu-title search-box">Kategorie</span>
                 {searchedCategoriesState?.map((searchedCategory) =>
-                  <Link href={`/search/${searchedCategory.slug.current}`}>
+                  <Link onClick={() => setSearching(false)} href={`/search/${searchedCategory.slug.current}`}>
                     <li className="dropdown-item search-box">
-                      <a href="#">{searchedCategory.name}</a>
+                      <div>{searchedCategory.name}</div>
                     </li>
                   </Link>
                 )}
@@ -175,10 +178,6 @@ const Navbar = () => {
           </div>
 
           <div className="header-user-actions">
-
-
-
-
 
             <button className="action-btn cart-icon" onClick={() => setShowCart(true)} >
               <AiOutlineShopping />
@@ -199,7 +198,7 @@ const Navbar = () => {
 
 
             {console.log(newSections)}
-            {newSections.map((category => <Category category={category} />))}
+            {newSections.map((category => <Category category={category} key={category._id} />))}
 
           </ul>
 
@@ -249,7 +248,7 @@ const Navbar = () => {
         <ul className="mobile-menu-category-list">
 
           <li className="menu-category">
-            <a href="#" className="menu-title">Home</a>
+            <Link href="#" className="menu-title">Home</Link>
           </li>
 
           <li className="menu-category">
@@ -266,19 +265,19 @@ const Navbar = () => {
             <ul className="submenu-category-list" data-accordion>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Shirt</a>
+                <Link href="#" className="submenu-title">Shirt</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Shorts & Jeans</a>
+                <Link href="#" className="submenu-title">Shorts & Jeans</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Safety Shoes</a>
+                <Link href="#" className="submenu-title">Safety Shoes</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Wallet</a>
+                <Link href="#" className="submenu-title">Wallet</Link>
               </li>
 
             </ul>
@@ -299,19 +298,19 @@ const Navbar = () => {
             <ul className="submenu-category-list" data-accordion>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Dress & Frock</a>
+                <Link href="#" className="submenu-title">Dress & Frock</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Earrings</a>
+                <Link href="#" className="submenu-title">Earrings</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Necklace</a>
+                <Link href="#" className="submenu-title">Necklace</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Makeup Kit</a>
+                <Link href="#" className="submenu-title">Makeup Kit</Link>
               </li>
 
             </ul>
@@ -332,19 +331,19 @@ const Navbar = () => {
             <ul className="submenu-category-list" data-accordion>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Earrings</a>
+                <Link href="#" className="submenu-title">Earrings</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Couple Rings</a>
+                <Link href="#" className="submenu-title">Couple Rings</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Necklace</a>
+                <Link href="#" className="submenu-title">Necklace</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Bracelets</a>
+                <Link href="#" className="submenu-title">Bracelets</Link>
               </li>
 
             </ul>
@@ -365,19 +364,19 @@ const Navbar = () => {
             <ul className="submenu-category-list" data-accordion>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Clothes Perfume</a>
+                <Link href="#" className="submenu-title">Clothes Perfume</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Deodorant</a>
+                <Link href="#" className="submenu-title">Deodorant</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Flower Fragrance</a>
+                <Link href="#" className="submenu-title">Flower Fragrance</Link>
               </li>
 
               <li className="submenu-category">
-                <a href="#" className="submenu-title">Air Freshener</a>
+                <Link href="#" className="submenu-title">Air Freshener</Link>
               </li>
 
             </ul>
@@ -385,11 +384,11 @@ const Navbar = () => {
           </li>
 
           <li className="menu-category">
-            <a href="#" className="menu-title">Blog</a>
+            <Link href="#" className="menu-title">Blog</Link>
           </li>
 
           <li className="menu-category">
-            <a href="#" className="menu-title">Hot Offers</a>
+            <Link href="#" className="menu-title">Hot Offers</Link>
           </li>
 
         </ul>
@@ -409,15 +408,15 @@ const Navbar = () => {
               <ul className="submenu-category-list" data-accordion>
 
                 <li className="submenu-category">
-                  <a href="#" className="submenu-title">English</a>
+                  <Link href="#" className="submenu-title">English</Link>
                 </li>
 
                 <li className="submenu-category">
-                  <a href="#" className="submenu-title">Espa&ntilde;ol</a>
+                  <Link href="#" className="submenu-title">Espa&ntilde;ol</Link>
                 </li>
 
                 <li className="submenu-category">
-                  <a href="#" className="submenu-title">Fren&ccedil;h</a>
+                  <Link href="#" className="submenu-title">Fren&ccedil;h</Link>
                 </li>
 
               </ul>
@@ -432,11 +431,11 @@ const Navbar = () => {
 
               <ul className="submenu-category-list" data-accordion>
                 <li className="submenu-category">
-                  <a href="#" className="submenu-title">USD &dollar;</a>
+                  <Link href="#" className="submenu-title">USD &dollar;</Link>
                 </li>
 
                 <li className="submenu-category">
-                  <a href="#" className="submenu-title">EUR &euro;</a>
+                  <Link href="#" className="submenu-title">EUR &euro;</Link>
                 </li>
               </ul>
             </li>
@@ -446,27 +445,27 @@ const Navbar = () => {
           <ul className="menu-social-container">
 
             <li>
-              <a href="#" className="social-link">
+              <Link href="#" className="social-link">
                 <ion-icon name="logo-facebook"></ion-icon>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="social-link">
+              <Link href="#" className="social-link">
                 <ion-icon name="logo-twitter"></ion-icon>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="social-link">
+              <Link href="#" className="social-link">
                 <ion-icon name="logo-instagram"></ion-icon>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="social-link">
+              <Link href="#" className="social-link">
                 <ion-icon name="logo-linkedin"></ion-icon>
-              </a>
+              </Link>
             </li>
 
           </ul>

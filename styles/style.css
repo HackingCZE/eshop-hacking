@@ -549,6 +549,18 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   font-size: var(--fs-3);
   font-weight: bold;
 }
+.behindSearch{
+
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background: rgba(0, 0, 0, .8);
+  left: 0;
+  top: 0;
+  right: 0;
+}
+
 
 .menu-close-btn {
   color: var(--eerie-black);
@@ -924,6 +936,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   display: flex;
   align-items: center;
   gap: 15px;
+  
 }
 
 .sidebar .showcase:not(:last-child) { margin-bottom: 15px; }
@@ -1216,7 +1229,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .product-grid {
   display: grid;
   grid-template-columns: 1fr;
+  grid-auto-rows: .5fr;
   gap: 25px;
+ 
+  
 }
 
 .product-grid .showcase {
@@ -1224,6 +1240,8 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   border-radius: var(--border-radius-md);
   overflow: hidden;
   transition: var(--transition-timing);
+  min-width: 200px;
+  height: 100%;
 }
 
 .product-grid .showcase:hover { box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1); }

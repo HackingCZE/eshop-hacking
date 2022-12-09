@@ -10,3 +10,4 @@ export {default  as Cart} from './Cart';
 export {default  as Order} from './Order';
 export {default as Category} from './Category';
 export {default as Filter} from './Filter';
+export {default as GridOfProducts} from  './GridOfProducts';

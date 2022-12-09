@@ -4,21 +4,21 @@ import Head from 'next/head';
 import NavBar from './Navbar';
 import Footer from './Footer';
 
-const Layout = ({children}) => {
+const Layout = ({ children }) => {
   return (
     <div className='layout'>
       <Head>
         <title>E-Shop</title>
-        
+
       </Head>
       <header>
         <NavBar />
       </header>
       <main className='main-container'>
-      {children}
+        {children}
       </main>
       <footer>
-        <Footer/>
+        <Footer />
       </footer>
     </div>
   )

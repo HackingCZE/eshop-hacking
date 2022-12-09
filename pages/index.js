@@ -1,41 +1,39 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useStateContext } from '../context/StateContext';
 
 import { client } from '../lib/client';
-import { Product, HeroBanner, FooterBanner } from '../components';
+import { Product, HeroBanner, FooterBanner, GridOfProducts } from '../components';
 
-
+import PulseLoader from "react-spinners/PulseLoader";
 
 const Home = ({ products, bannerData, bannerProductData, keys, sections, subsections }) => {
-  const {setProducts, setKeys, setSections, setSubsections} = useStateContext();
+  const { setProducts, setKeys, setSections, setSubsections } = useStateContext();
   useEffect(() => {
     setProducts(products)
     setKeys(keys)
     setSections(sections)
     setSubsections(subsections)
-    
-},[])
 
+  }, [])
 
-  return(
-  <div>{console.log(bannerProductData[0].slug + " ///////////////////////////")}
- 
-    <HeroBanner productBanner={bannerProductData.length && bannerProductData[0]} heroBanner={bannerData.length && bannerData[0]} />
-    <div className="products-heading">
-      <h2>Nejlepší produkty na prodej</h2>
-      <p>Sluchátka s několika variantami</p>
+  
+  return (
+    <div>{console.log(bannerProductData[0].slug + " ///////////////////////////")}
+
+      <HeroBanner productBanner={bannerProductData.length && bannerProductData[0]} heroBanner={bannerData.length && bannerData[0]} />
+      <div className="products-heading">
+        <h2>Nejlepší produkty na prodej</h2>
+        <p>Sluchátka s několika variantami</p>
+      </div>
+
+      <GridOfProducts products={products}/>
+
+      <FooterBanner footerBanner={bannerData && bannerData[0]} footerProduct={bannerProductData.length && bannerProductData[0]} />
     </div>
 
-    <div className="products-container">
-      {products?.map(
-        (product) => <Product key={product._id} product={product} />)}
-    </div>
-    
-    <FooterBanner footerBanner={bannerData && bannerData[0]} footerProduct={bannerProductData.length && bannerProductData[0]} />
-  </div>
-
-)}
+  )
+}
 
 export const getServerSideProps = async () => {
   const query = '*[_type == "product"]';
@@ -55,11 +53,11 @@ export const getServerSideProps = async () => {
 
   const sectionsQuery = '*[_type == "section"]';
   const sections = await client.fetch(sectionsQuery);
-  
+
   const subsectionsQuery = '*[_type == "subsection"]';
   const subsections = await client.fetch(subsectionsQuery);
 
- 
+
   return {
     props: { products, bannerData, bannerProductData, keys, sections, subsections }
   }
