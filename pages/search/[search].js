@@ -33,7 +33,7 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
         let prs = getAllSearchedProducts();
         setAllSearchedProducts(prs);
         setFliters(prs)
-    }, [slug.slug.current])
+    }, slug.slug.current)
 
 
 
