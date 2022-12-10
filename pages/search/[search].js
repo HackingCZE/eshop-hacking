@@ -119,18 +119,18 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
                         newArray.push(searchingProduct)
                     }
                 });
-    
+
             }))
-    
+
             products.filter(searchingProduct => searchingProduct.keys?.forEach(element => {
-    
+
                 subsections.forEach(key => {
                     console.log(key)
                     if (element._ref === key._id && slug.slug.current.toLowerCase().includes(key.name.toLowerCase())) {
                         newArray.push(searchingProduct)
                     }
                 });
-    
+
             }))
 
             let newFiltredArray = [];
@@ -163,23 +163,23 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
                             </button>
                         </div>
                         <ul className="sidebar-menu-category-list">
-                            {allSearchedProducts.length > 1 &&  <div>
-                            <div className='slider-texts'>
-                                <span>{value1[0]}</span>
-                                <span>{value1[1]}</span>
-                            </div>
-                        
-                            <Slider
-                                getAriaLabel={() => 'Minimum distance'}
-                                value={value1}
-                                onChange={handleChange1}
-                                valueLabelDisplay="auto"
-                                getAriaValueText={valuetext}
-                                disableSwap
-                                step={1}
-                                min={priceMin}
-                                max={priceMax}
-                            />
+                            {allSearchedProducts.length > 1 && <div>
+                                <div className='slider-texts'>
+                                    <span>{value1[0]}</span>
+                                    <span>{value1[1]}</span>
+                                </div>
+
+                                <Slider
+                                    getAriaLabel={() => 'Minimum distance'}
+                                    value={value1}
+                                    onChange={handleChange1}
+                                    valueLabelDisplay="auto"
+                                    getAriaValueText={valuetext}
+                                    disableSwap
+                                    step={1}
+                                    min={priceMin}
+                                    max={priceMax}
+                                />
                             </div>}
                             <Filter />
 
@@ -218,6 +218,7 @@ export const getStaticPaths = async () => {
         }
     }));
 
+    console.log(paths)
     return {
         paths,
         fallback: 'blocking'
@@ -225,10 +226,14 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params: { search } }) => {
-    const query = `*[_type == "subsection" && slug.current == '${search}'][0]`;
-    const slug = await client.fetch(query);
+    let query = `*[_type == "subsection" && slug.current == '${search}'][0]`;
+    let slug = await client.fetch(query);
 
-
+    if (slug === null) {
+        query = `*[_type == "section" && slug.current == '${search}'][0]`;
+        slug = await client.fetch(query);
+    }
+    console.log(slug)
 
     const productsQuery = '*[_type == "product"]'
     const products = await client.fetch(productsQuery);
