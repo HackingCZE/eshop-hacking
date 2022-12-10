@@ -210,13 +210,34 @@ export const getStaticPaths = async () => {
     }
             `;
 
-    const sections = await client.fetch(query);
+    const query1 = `*[_type == "subsection"] {
+                slug {
+                current
+            }
+    }
+            `;
 
-    const paths = sections.map((section) => ({
+    const sections = await client.fetch(query);
+    const subsections = await client.fetch(query1);
+
+    let paths0 = sections.map((section) => ({
         params: {
             search: section.slug.current
         }
     }));
+    let paths1 = subsections.map((subsection) => ({
+
+        params: {
+            search: subsection.slug.current
+        }
+    }));
+    let paths = [];
+    paths1.forEach(element => {
+        paths.push(element);
+    });
+    paths0.forEach(element => {
+        paths.push(element);
+    });
 
     console.log(paths)
     return {
@@ -227,7 +248,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params: { search } }) => {
     let query = `*[_type == "subsection" && slug.current == '${search}'][0]`;
-    
+
 
 
 
@@ -247,7 +268,7 @@ export const getStaticProps = async ({ params: { search } }) => {
     sections.forEach(element => {
         if (element.slug.current === search) {
             query = `*[_type == "section" && slug.current == '${search}'][0]`;
-            
+
         }
     });
     let slug = await client.fetch(query);
