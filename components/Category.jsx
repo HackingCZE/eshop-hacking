@@ -4,7 +4,7 @@ import React from 'react'
 const Category = ({ category }) => {
     return (
         <div>
-            <li className="menu-category" key={category._id}>
+            <li className="menu-category" >
                 {console.log(category)}
                 <Link href={`/search/${category.slug.current}`} className="menu-title">{category.name} </Link>
 
