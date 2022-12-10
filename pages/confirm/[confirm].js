@@ -48,7 +48,7 @@ export const getStaticPaths = async () => {
   }
 }
 
-export const getStaticProps = async ({ params: { confirm } }) => {
+export const getServerSideProps = async ({ params: { confirm } }) => {
   console.log(confirm)
   const query = `*[_type == "order" && slug == '${confirm.substring(0, 13)}'][0]`;
   const code = confirm.substring(13, 20);
