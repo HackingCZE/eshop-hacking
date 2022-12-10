@@ -301,7 +301,7 @@ const Handler = async (req, res) => {
         var myDate = new Date("2 dec 2012 3:30:00");
         myDate.setHours(myDate.getHours() + 24);
         try {
-          client.config({
+          await client.config({
             token: process.env.NEXT_PUBLIC_SANITY_TOKEN
           }).create({
             _type: 'order',
