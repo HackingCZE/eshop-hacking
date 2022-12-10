@@ -33,7 +33,7 @@ const SearchedProducts = ({ products, keys, sections, subsections, slug }) => {
         let prs = getAllSearchedProducts();
         setAllSearchedProducts(prs);
         setFliters(prs)
-    }, slug.slug.current)
+    }, [slug.slug.current])
 
 
 
@@ -227,13 +227,10 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params: { search } }) => {
     let query = `*[_type == "subsection" && slug.current == '${search}'][0]`;
-    let slug = await client.fetch(query);
+    
 
-    if (slug === null) {
-        query = `*[_type == "section" && slug.current == '${search}'][0]`;
-        slug = await client.fetch(query);
-    }
-    console.log(slug)
+
+
 
     const productsQuery = '*[_type == "product"]'
     const products = await client.fetch(productsQuery);
@@ -247,8 +244,13 @@ export const getStaticProps = async ({ params: { search } }) => {
     const subsectionsQuery = '*[_type == "subsection"]';
     const subsections = await client.fetch(subsectionsQuery);
 
-
-
+    sections.forEach(element => {
+        if (element.slug.current === search) {
+            query = `*[_type == "section" && slug.current == '${search}'][0]`;
+            
+        }
+    });
+    let slug = await client.fetch(query);
     return {
         props: { products, keys, sections, subsections, slug }
     }
