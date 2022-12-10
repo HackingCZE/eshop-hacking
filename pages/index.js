@@ -20,7 +20,7 @@ const Home = ({ products, bannerData, bannerProductData, keys, sections, subsect
   
   return (
     <div>{console.log(bannerProductData[0].slug + " ///////////////////////////")}
-
+{console.log(orders)}
       <HeroBanner productBanner={bannerProductData.length && bannerProductData[0]} heroBanner={bannerData.length && bannerData[0]} />
       <div className="products-heading">
         <h2>Nejlepší produkty na prodej</h2>
