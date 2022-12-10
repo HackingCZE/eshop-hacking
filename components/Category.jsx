@@ -6,7 +6,7 @@ const Category = ({ category }) => {
         <div>
             <li className="menu-category" >
                 {console.log(category)}
-                <Link href={`/search/${category.slug.current}`} className="menu-title">{category.name} </Link>
+                <div  className="menu-title">{category.name} </div>
 
                 <ul className="dropdown-list">
                     {category.subsections?.map((subsection) =>
