@@ -7,14 +7,14 @@ import { Product, HeroBanner, FooterBanner, GridOfProducts } from '../components
 
 import PulseLoader from "react-spinners/PulseLoader";
 
-const Home = ({ products, bannerData, bannerProductData, keys, sections, subsections }) => {
-  const { setProducts, setKeys, setSections, setSubsections } = useStateContext();
+const Home = ({ products, bannerData, bannerProductData, keys, sections, subsections, ordersData }) => {
+  const { setProducts, setKeys, setSections, setSubsections, setOrders, orders } = useStateContext();
   useEffect(() => {
     setProducts(products)
     setKeys(keys)
     setSections(sections)
     setSubsections(subsections)
-
+    setOrders(ordersData)
   }, [])
 
   
@@ -48,6 +48,9 @@ export const getServerSideProps = async () => {
   const bannerQuery = '*[_type == "banner"]';
   const bannerData = await client.fetch(bannerQuery);
 
+  const ordersQuery = '*[_type == "order"]';
+  const ordersData = await client.fetch(ordersQuery);
+
   const keysQuery = '*[_type == "key"]';
   const keys = await client.fetch(keysQuery);
 
@@ -59,7 +62,7 @@ export const getServerSideProps = async () => {
 
 
   return {
-    props: { products, bannerData, bannerProductData, keys, sections, subsections }
+    props: { products, bannerData, bannerProductData, keys, sections, subsections, ordersData }
   }
 }
 

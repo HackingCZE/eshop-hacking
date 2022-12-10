@@ -9,6 +9,7 @@ export const StateContext = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [sections, setSections] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [subsections, setSubsections] = useState([]);
     const [keys, setKeys] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -95,6 +96,8 @@ export const StateContext = ({ children }) => {
     return (
         <Context.Provider
             value={{
+                setOrders,
+                orders,
                 setSubsections,
                 subsections,
                 setSections,
