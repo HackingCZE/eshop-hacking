@@ -303,7 +303,7 @@ const Handler = async (req, res) => {
         data.productInOrder = productInOrder;
         data.unneCode = unneCode;
         data.unneID = unneID;
-        await fetch('https://eshop-hacking.vercel.app//api/order', {
+        await fetch('https://eshop-hacking.vercel.app/api/order', {
           method: 'POST',
           body: JSON.stringify(data),
           type: 'application/json'

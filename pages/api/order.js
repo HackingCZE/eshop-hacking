@@ -9,9 +9,7 @@ export default async function createOrder(req, res) {
       
     try {
       // Use our Client to create a new document in Sanity with an object  
-      await client.config({
-        token: process.env.NEXT_PUBLIC_SANITY_TOKEN
-      }).create({
+      await client.create({
         _type: 'order',
         name: data.name,
         email: data.email,
